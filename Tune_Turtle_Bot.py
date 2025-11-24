@@ -190,6 +190,15 @@ def is_high_rank():
             return False
     return commands.check(predicate)
 
+
+@bot.event
+async def on_ready():
+    """Confirms the bot is running and connected to Discord."""
+    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
+    print('------')
+    await bot.change_presence(activity=discord.Game(name="The beat never stops."))
+
+
 # ---------------------------------------------
 ## 📝 Error Handling
 # ---------------------------------------------
