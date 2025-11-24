@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Dockerfile content:
 # Use a slim version of Python 3.11 for a smaller image
 FROM python:3.11-slim

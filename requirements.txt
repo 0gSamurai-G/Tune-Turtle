@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # requirements.txt content:
 discord.py
 yt-dlp
