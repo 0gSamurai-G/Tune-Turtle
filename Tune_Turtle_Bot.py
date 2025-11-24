@@ -8,6 +8,7 @@ import random
 # --- Configuration ---
 # CRITICAL CHANGE: Reading the token securely from the environment.
 # You MUST set the DISCORD_BOT_TOKEN variable in your Railway dashboard.
+ALLOWED_SERVERS = {1439561356960464979}
 DISCORD_BOT_TOKEN = os.environ.get("DISCORD_BOT_TOKEN")
 
 # --- yt-dlp Options ---
@@ -196,8 +197,27 @@ async def on_ready():
     """Confirms the bot is running and connected to Discord."""
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
     print('------')
+
+    unauthorized_guilds = []
+    for guild in bot.guilds:
+        if guild.id not in ALLOWED_SERVERS:
+            unauthorized_guilds.append(guild.name)
+            await guild.leave()
+            
+    if unauthorized_guilds:
+        print(f"🚫 CLEANUP: Left the following unauthorized guilds on startup: {', '.join(unauthorized_guilds)}")
+
     await bot.change_presence(activity=discord.Game(name="The beat never stops."))
 
+@bot.event
+async def on_guild_join(guild):
+    """3. 🛡️ CHECK ON NEW INVITE"""
+    if guild.id not in ALLOWED_SERVERS:
+        print(f"❌ UNAUTHORIZED JOIN: Leaving Guild '{guild.name}' (ID: {guild.id})")
+        # Optional: Add a polite message here before leaving
+        await guild.leave()
+    else:
+        print(f"✅ ALLOWED JOIN: Staying in Guild '{guild.name}' (ID: {guild.id})")
 
 # ---------------------------------------------
 ## 📝 Error Handling
@@ -418,7 +438,8 @@ async def resume(ctx):
         await ctx.send("❌ Nothing is paused.")
 
 # --- Run the Bot ---
-if DISCORD_BOT_TOKEN:
-    bot.run(DISCORD_BOT_TOKEN)
-else:
-    print("ERROR: DISCORD_BOT_TOKEN environment variable not set. Bot will not start.")
+if __name__ == "__main__":
+    if DISCORD_BOT_TOKEN:
+        bot.run(DISCORD_BOT_TOKEN)
+    else:
+        print("Bot token not found. Please set the DISCORD_BOT_TOKEN environment variable.")
