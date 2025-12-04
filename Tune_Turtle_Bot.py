@@ -6,7 +6,7 @@ import os
 import random
 
 # --- Configuration ---
-# CRITICAL CHANGE: Reading the token securely from the environment.
+# CRITICAL CHANGE: Reading the token securely from the environment new.
 # You MUST set the DISCORD_BOT_TOKEN variable in your Railway dashboard.
 ALLOWED_SERVERS = {1439561356960464979}
 DISCORD_BOT_TOKEN = os.environ.get("DISCORD_BOT_TOKEN")
